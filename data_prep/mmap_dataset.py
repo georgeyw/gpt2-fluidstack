@@ -1,5 +1,5 @@
 # from GPT-NeoX library with some modifications (context length related)
-# original file comments below (with some notes on context length removed):
+# original file comments below (with some notes on context length):
 
 # Copyright (c) 2021, EleutherAI
 # This file is based on code by the authors denoted below and has been modified from its original version.
@@ -228,6 +228,7 @@ class MMapIndexedDataset(torch.utils.data.Dataset):
             np_array = np.frombuffer(
                 self._bin_buffer, dtype=self._index.dtype, count=total_size, offset=ptr
             )
+            np_array = np_array[:len(np_array) - (len(np_array) % CONTEXT_LENGTH)]
             return np_array.reshape(-1, CONTEXT_LENGTH)
 
     def get(self, idx, offset=0, length=None):

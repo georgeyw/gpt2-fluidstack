@@ -1,10 +1,11 @@
-# from GPT-NeoX library with some modifications (typos only, I think)
+# from GPT-NeoX library with some modifications related to context length
 
 from mmap_dataset import MMapIndexedDataset
 from tqdm import trange
 import numpy as np
 import argparse
 import os
+import math
 
 from constants import BATCH_SIZE, GRAD_ACCUM_STEPS
 
@@ -43,5 +44,7 @@ if __name__ == '__main__':
     filename = os.path.join(args.save_path, "indicies.npy")
 
     dataset = MMapIndexedDataset(args.load_path, skip_warmup = True)
-    indicies = dataset[args.start_iteration*BATCH_SIZE: args.end_iteration*BATCH_SIZE + 1]
+    # the pre-tokenized sequences are length 2049
+    # we want to split these into sequences of length 1024
+    indicies = dataset[math.ceil(args.start_iteration/2)*BATCH_SIZE: math.ceil(args.end_iteration/2)*BATCH_SIZE + 1]
     np.save(filename, indicies)
