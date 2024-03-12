@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
-from constants import BATCH_SIZE
+from .constants import BATCH_SIZE
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 INDICES_PATH = os.path.join(DIR, '../token_indices/', 'indicies.npy')
@@ -36,6 +36,6 @@ INDICES_PATH = os.path.join(DIR, '../token_indices/', 'indicies.npy')
 def build_dataset():
     indices = np.load(INDICES_PATH)
     indices = np.array(indices, dtype=np.float64)
-    tensors = torch.Tensor(indices, dtype=torch.int64)
+    tensors = torch.Tensor(indices, device='cuda', dtype=torch.int64)
     dataset = TensorDataset(tensors)
     return dataset

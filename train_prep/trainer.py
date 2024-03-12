@@ -41,3 +41,7 @@ def lm_cross_entropy_loss(
     else:
         return -predicted_log_probs.mean()
     
+
+def custom_data_collator(features):
+    # this is a dummy data collator that just returns the input
+    return features

@@ -1,6 +1,6 @@
 from transformers import GPTNeoXForCausalLM
 
-from config import build_model_config
+from .config import build_model_config
 
 
 def build_model():

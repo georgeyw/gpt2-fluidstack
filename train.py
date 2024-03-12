@@ -5,7 +5,7 @@ from transformers import TrainingArguments
 from data_prep.data import build_dataset
 from data_prep.constants import BATCH_SIZE, GRAD_ACCUM_STEPS
 from model_prep.model import build_model
-from train_prep.trainer import CustomTrainer
+from train_prep.trainer import CustomTrainer, custom_data_collator
 
 HUB_TOKEN = os.environ.get("HUB_TOKEN")
 os.environ["WANDB_PROJECT"] = "gw-hf-trainer-test"
@@ -17,6 +17,9 @@ TRAIN_ARGS = TrainingArguments(
     torch_compile=True,
     deepspeed="./train_prep/ds_config.json",
     # tf32=True, # maybe change / test? compare with fp16 -- I think this is getting overwritten by deepspeed? with AMP
+    fp16=True,
+    fp16_opt_level="O1",
+    fp16_backend="apex",
     seed=5,
     full_determinism=True,
     # data
@@ -55,6 +58,7 @@ if __name__ == "__main__":
         model_init=build_model,
         args=TRAIN_ARGS,
         train_dataset=dataset,
+        data_collator=custom_data_collator,
     )
 
     trainer.train()
