@@ -16,10 +16,11 @@ TRAIN_ARGS = TrainingArguments(
     do_train=True,
     torch_compile=True,
     deepspeed="./train_prep/ds_config.json",
+    bf16=True,
     # tf32=True, # maybe change / test? compare with fp16 -- I think this is getting overwritten by deepspeed? with AMP
-    fp16=True,
-    fp16_opt_level="O1",
-    fp16_backend="apex",
+    # fp16=True,
+    # fp16_opt_level="O1",
+    # fp16_backend="apex",
     seed=5,
     full_determinism=True,
     # data
@@ -39,7 +40,7 @@ TRAIN_ARGS = TrainingArguments(
     lr_scheduler_type="cosine",
     warmup_ratio=0.01,
     # checkpointing
-    save_steps=10,
+    save_steps=100,
     push_to_hub=True,
     hub_model_id="georgeyw/gpt-2-small",
     hub_strategy="every_save",

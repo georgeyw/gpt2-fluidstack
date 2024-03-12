@@ -24,7 +24,7 @@
           "cos_min_ratio": 0.1
         }
       },
-    "amp": {
+    "bf16": {
         "enabled": true
     },
     "gradient_clipping": 1.0,

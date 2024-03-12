@@ -36,6 +36,7 @@ INDICES_PATH = os.path.join(DIR, '../token_indices/', 'indicies.npy')
 def build_dataset():
     indices = np.load(INDICES_PATH)
     indices = np.array(indices, dtype=np.float64)
-    tensors = torch.Tensor(indices, device='cuda', dtype=torch.int64)
+    tensors = torch.Tensor(indices, device='cpu')
+    tensors = tensors.to(torch.int64)
     dataset = TensorDataset(tensors)
     return dataset
