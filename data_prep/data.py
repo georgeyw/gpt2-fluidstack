@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from constants import BATCH_SIZE
 
 DIR = os.path.dirname(os.path.abspath(__file__))
-INDICES_PATH = os.path.join(DIR, '/../token_indices/', 'indicies.npy')
+INDICES_PATH = os.path.join(DIR, '../token_indices/', 'indicies.npy')
 
 # # code from https://pytorch.org/docs/stable/notes/randomness.html
 # def seed_worker(worker_id):
