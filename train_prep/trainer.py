@@ -7,7 +7,7 @@ import torch
 import torch.nn.functional as F
 
 from huggingface_hub import upload_folder
-from transformers import Trainer
+from transformers import TrainingArguments
 from transformers.trainer_utils import HubStrategy, IntervalStrategy
 from transformers.utils import (
     ADAPTER_CONFIG_NAME,
@@ -33,7 +33,7 @@ FSDP_MODEL_NAME = "pytorch_model_fsdp"
 
 # subclass Trainer for custom loss
 # only doing this to avoid having to figure out how to add labels to the dataset
-class CustomTrainer(Trainer):
+class CustomTrainer(TrainingArguments):
     def __init__(self, push_hub_every=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.push_hub_every = push_hub_every
