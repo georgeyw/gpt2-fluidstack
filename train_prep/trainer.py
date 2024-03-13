@@ -39,18 +39,6 @@ from transformers.trainer_utils import (
     TrainOutput,
     has_length,
     speed_metrics,
-    ADAPTER_CONFIG_NAME,
-    ADAPTER_SAFE_WEIGHTS_NAME,
-    ADAPTER_WEIGHTS_NAME,
-    CONFIG_NAME,
-    SAFE_WEIGHTS_NAME,
-    WEIGHTS_NAME,
-    PushInProgress,
-    is_accelerate_available,
-    is_peft_available,
-    is_sagemaker_mp_enabled,
-    is_torch_xla_available,
-    logging,
 )
 from transformers.utils import (
     ADAPTER_CONFIG_NAME,
@@ -69,6 +57,8 @@ from transformers.utils import (
     TrainOutput,
     has_length,
     speed_metrics,
+    is_accelerate_available,
+    is_sagemaker_mp_enabled,
     is_torch_xla_available,
 )
 from transformers.trainer_pt_utils import (
