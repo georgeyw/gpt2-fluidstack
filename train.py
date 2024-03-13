@@ -4,7 +4,7 @@ from transformers import TrainingArguments
 
 from data_prep.data import build_dataset
 from data_prep.constants import BATCH_SIZE, GRAD_ACCUM_STEPS
-from model_prep.model import build_model
+from model_prep.model import load_init_model
 from train_prep.trainer import CustomTrainer, custom_data_collator
 
 HUB_TOKEN = os.environ.get("HUB_TOKEN")
@@ -22,13 +22,13 @@ TRAIN_ARGS = TrainingArguments(
     # fp16_opt_level="O1",
     # fp16_backend="apex",
     seed=5,
-    full_determinism=True,
+    full_determinism=True, # costs around 25% performance
     # data
     per_device_train_batch_size=BATCH_SIZE,
     gradient_accumulation_steps=GRAD_ACCUM_STEPS,
     num_train_epochs=1,
     dataloader_pin_memory=True,
-    dataloader_num_workers=0, # maybe change / test?
+    dataloader_num_workers=8, # maybe change / test?
     # optim -- I think this is getting overwritten by deepspeed?
     optim="adamw_torch",
     learning_rate=6e-4,
@@ -52,11 +52,12 @@ TRAIN_ARGS = TrainingArguments(
     run_name="gw-hf-trainer-test-run-name",
 )
 
+
 if __name__ == "__main__":
     dataset = build_dataset()
 
     trainer = CustomTrainer(
-        model_init=build_model,
+        model_init=load_init_model,
         args=TRAIN_ARGS,
         train_dataset=dataset,
         data_collator=custom_data_collator,

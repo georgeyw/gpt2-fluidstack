@@ -1,6 +1,6 @@
 {
     "train_batch_size": 256,
-    "train_micro_batch_size_per_gpu": 16,
+    "train_micro_batch_size_per_gpu": "auto",
     "gradient_accumulation_steps": "auto",
     "optimizer": {
         "type": "Adam",
@@ -18,8 +18,8 @@
     "scheduler": {
         "type": "WarmupCosineLR",
         "params": {
-          "total_num_steps": 1000,
-          "warmup_num_steps": 10,
+          "total_num_steps": 800000,
+          "warmup_num_steps": 8000,
           "warmup_type": "linear",
           "cos_min_ratio": 0.1
         }
@@ -38,12 +38,6 @@
         "contiguous_gradients": true
     },
     "steps_per_print": 10,
-    "wall_clock_breakdown": true,
-    "flops_profiler": {
-        "enabled": true,
-        "profile_step": 10,
-        "output_file": "flops_profiler.txt"
-    },
     "wandb": {
         "enabled": true,
         "team": "devinterp",

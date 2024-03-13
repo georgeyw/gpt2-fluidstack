@@ -1,3 +1,4 @@
+import torch
 import torch.nn.functional as F
 
 from transformers import Trainer
@@ -10,6 +11,7 @@ class CustomTrainer(Trainer):
         super().__init__(*args, **kwargs)
 
     def compute_loss(self, model, inputs, return_outputs=False):
+        inputs = torch.stack([item[0] for item in inputs])
         outputs = model(inputs)
         logits = outputs.logits
         loss = lm_cross_entropy_loss(logits, inputs)
