@@ -61,6 +61,7 @@ if __name__ == "__main__":
         args=TRAIN_ARGS,
         train_dataset=dataset,
         data_collator=custom_data_collator,
+        push_hub_every=1000,
     )
 
     trainer.train()
