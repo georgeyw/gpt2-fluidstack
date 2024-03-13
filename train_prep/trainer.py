@@ -51,7 +51,6 @@ from transformers.utils import (
     logging,
     is_accelerate_available,
     is_sagemaker_mp_enabled,
-    is_torch_xla_available,
 )
 from transformers.trainer_pt_utils import (
     get_dataloader_sampler,
@@ -65,6 +64,7 @@ if is_sagemaker_mp_enabled():
     import smdistributed.modelparallel.torch as smp
 from transformers.training_args import ParallelMode
 
+from transformers.utils.import_utils import is_torch_xla_available
 
 if is_torch_xla_available():
     import torch_xla.core.xla_model as xm
