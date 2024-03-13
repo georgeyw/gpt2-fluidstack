@@ -3,9 +3,10 @@ from transformers import GPTNeoXForCausalLM
 
 from .config import build_model_config
 
+SEED = 5
 
-def build_model(seed=5):
-    torch.manual_seed(seed)
+def build_model():
+    torch.manual_seed(SEED)
     config = build_model_config()
     model = GPTNeoXForCausalLM(config)
     return model
