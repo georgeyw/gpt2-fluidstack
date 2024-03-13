@@ -6,6 +6,7 @@ from data_prep.data import build_dataset
 from data_prep.constants import BATCH_SIZE, GRAD_ACCUM_STEPS
 from model_prep.model import load_init_model
 from train_prep.trainer import CustomTrainer, custom_data_collator
+from train_prep.callbacks import CustomDefaultFlowCallback
 
 HUB_TOKEN = os.environ.get("HUB_TOKEN")
 os.environ["WANDB_PROJECT"] = "gw-hf-trainer-test"
@@ -40,7 +41,7 @@ TRAIN_ARGS = TrainingArguments(
     lr_scheduler_type="cosine",
     warmup_ratio=0.01,
     # checkpointing
-    save_steps=100,
+    save_steps=[10, 50, 100, 200, 500, 1000],
     push_to_hub=True,
     hub_model_id="georgeyw/gpt-2-small",
     hub_strategy="every_save",
