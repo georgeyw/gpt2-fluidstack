@@ -37,7 +37,7 @@ class CustomTrainer(Trainer):
     def __init__(self, push_hub_every=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.push_hub_every = push_hub_every
-        assert self.push_hub_every % self.save_steps == 0
+        assert self.push_hub_every % self.args.save_steps == 0
 
     def compute_loss(self, model, inputs, return_outputs=False):
         inputs = torch.stack([item[0] for item in inputs])
