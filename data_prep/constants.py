@@ -2,7 +2,7 @@ REPO_ID = "EleutherAI/pile-standard-pythia-preshuffled"
 
 CONTEXT_LENGTH = 1024
 
-NUM_GPUS = 8
+NUM_GPUS = 2
 
 BATCH_SIZE = 32
 GRAD_ACCUM_STEPS = 8 // NUM_GPUS
