@@ -27,9 +27,9 @@ import torch.distributed as dist
 from huggingface_hub import upload_folder
 
 from transformers import Trainer
-from trainsformers.trainer import _is_peft_model
+from transformers.trainer import _is_peft_model
 from transformers.integrations.tpu import tpu_spmd_dataloader
-from transformer.integrations.deepspeed import deepspeed_init, deepspeed_load_checkpoint
+from transformers.integrations.deepspeed import deepspeed_init, deepspeed_load_checkpoint
 from transformers.debug_utils import DebugOption, DebugUnderflowOverflow
 from transformers.trainer_utils import (
     PREFIX_CHECKPOINT_DIR,
