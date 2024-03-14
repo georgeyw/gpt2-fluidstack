@@ -2,7 +2,7 @@ import os
 
 from transformers import TrainingArguments
 
-from data_prep.data import build_dataset
+from data_prep.data import NPYDataset, INDICES_PATH
 from data_prep.constants import BATCH_SIZE, GRAD_ACCUM_STEPS
 from model_prep.model import load_init_model
 from train_prep.trainer import CustomTrainer, custom_data_collator
@@ -55,7 +55,7 @@ TRAIN_ARGS = TrainingArguments(
 
 
 if __name__ == "__main__":
-    dataset = build_dataset()
+    dataset = NPYDataset(INDICES_PATH, length=800_000 * 256)
 
     trainer = CustomTrainer(
         model_init=load_init_model,
