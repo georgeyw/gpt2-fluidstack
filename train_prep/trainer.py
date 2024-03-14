@@ -92,7 +92,7 @@ class CustomTrainer(Trainer):
             if self.push_hub_every:
                 if self.state.global_step > 0 and self.state.global_step % self.push_hub_every == 0:
                     last_global_save_step = self.state.global_step - self.push_hub_every
-                    checkpoint_folders = [f"{PREFIX_CHECKPOINT_DIR}-{i}" for i in range(last_global_save_step + self.save_steps, self.state.global_step + 1, self.save_steps)]
+                    checkpoint_folders = [f"{PREFIX_CHECKPOINT_DIR}-{i}" for i in range(last_global_save_step + self.args.save_steps, self.state.global_step + 1, self.args.save_steps)]
                     self._push_from_checkpoints(checkpoint_folders)
             else:
                 self._push_from_checkpoint(output_dir)
