@@ -115,6 +115,7 @@ class CustomTrainer(Trainer):
             return
 
         output_dir = self.args.output_dir
+        output_dir += f"-{self.state.global_step}"
         # To avoid a new synchronization of all model weights, we just copy the file from the checkpoint folder
         modeling_files = [CONFIG_NAME, WEIGHTS_NAME, SAFE_WEIGHTS_NAME]
         if is_peft_available():
