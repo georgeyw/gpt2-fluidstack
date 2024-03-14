@@ -15,5 +15,4 @@ if __name__ == "__main__":
         train_dataset=dataset,
         data_collator=custom_data_collator
     )
-
-    trainer._save_checkpoint(trainer.model, trial=None)
+    trainer.model.push_to_hub("georgeyw/gpt-2-small-init-seed-5")

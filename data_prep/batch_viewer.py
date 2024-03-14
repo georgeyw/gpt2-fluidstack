@@ -5,6 +5,7 @@ from tqdm import trange
 import numpy as np
 import argparse
 import os
+import math
 
 from constants import EFFECTIVE_BATCH_SIZE
 
@@ -45,5 +46,5 @@ if __name__ == '__main__':
     # the pre-tokenized sequences are length 2049
     # we want to split these into sequences of length 1024
     dataset = MMapIndexedDataset(args.load_path, skip_warmup = True)
-    indicies = dataset[args.start_iteration*EFFECTIVE_BATCH_SIZE: args.end_iteration*EFFECTIVE_BATCH_SIZE + 1]
+    indicies = dataset[math.ceil(args.start_iteration/2)*EFFECTIVE_BATCH_SIZE: math.ceil(args.end_iteration/2)*EFFECTIVE_BATCH_SIZE + 1]
     np.save(filename, indicies)
