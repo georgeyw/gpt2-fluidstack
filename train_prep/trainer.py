@@ -115,22 +115,22 @@ class CustomTrainer(Trainer):
             return
 
         output_dir = self.args.output_dir
-        output_dir += f"-{self.state.global_step}"
+        upload_dir = Path(output_dir + "-upload-" + str(self.state.global_step))
         # To avoid a new synchronization of all model weights, we just copy the file from the checkpoint folder
         modeling_files = [CONFIG_NAME, WEIGHTS_NAME, SAFE_WEIGHTS_NAME]
         if is_peft_available():
             modeling_files.extend([ADAPTER_CONFIG_NAME, ADAPTER_WEIGHTS_NAME, ADAPTER_SAFE_WEIGHTS_NAME])
         for modeling_file in modeling_files:
             for checkpoint_folder in checkpoint_folders:
-                if os.path.isfile(os.path.join(checkpoint_folder, modeling_file)):
-                    shutil.copy(os.path.join(checkpoint_folder, modeling_file), os.path.join(output_dir, checkpoint_folder, modeling_file))
+                if os.path.isfile(os.path.join(output_dir, checkpoint_folder, modeling_file)):
+                    shutil.copy(os.path.join(output_dir, checkpoint_folder, modeling_file), os.path.join(upload_dir, checkpoint_folder, modeling_file))
         # Saving the tokenizer is fast and we don't know how many files it may have spawned, so we resave it to be sure.
         if self.tokenizer is not None:
             for checkpoint_folder in checkpoint_folders:
-                self.tokenizer.save_pretrained(os.path.join(output_dir, checkpoint_folder))
+                self.tokenizer.save_pretrained(os.path.join(upload_dir, checkpoint_folder))
         # Same for the training arguments
         for checkpoint_folder in checkpoint_folders:
-            torch.save(self.args, os.path.join(output_dir, checkpoint_folder, TRAINING_ARGS_NAME))
+            torch.save(self.args, os.path.join(upload_dir, checkpoint_folder, TRAINING_ARGS_NAME))
 
         if self.args.save_strategy == IntervalStrategy.STEPS:
             commit_message = f"Training in progress, step {self.state.global_step}"
@@ -152,7 +152,7 @@ class CustomTrainer(Trainer):
         if self.args.hub_strategy in [HubStrategy.CHECKPOINT, HubStrategy.ALL_CHECKPOINTS]:
             checkpoint_push = upload_folder(
                 repo_id=self.hub_model_id,
-                folder_path=output_dir,
+                folder_path=upload_dir,
                 commit_message=commit_message + ", checkpoint",
                 token=self.args.hub_token,
                 run_as_future=True,
