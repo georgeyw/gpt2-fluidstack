@@ -41,9 +41,10 @@ TRAIN_ARGS = TrainingArguments(
     warmup_ratio=0.01,
     # checkpointing
     save_steps=100,
+    save_total_limit=5,
     push_to_hub=True,
     hub_model_id="georgeyw/gpt-2-small",
-    hub_strategy="every_save",
+    hub_strategy="all_checkpoints",
     hub_always_push=True,
     hub_token=HUB_TOKEN,
     # wandb -- is this necessary with deepspeed?
