@@ -41,7 +41,7 @@ TRAIN_ARGS = TrainingArguments(
     warmup_ratio=0.01,
     # checkpointing
     save_steps=100,
-    save_total_limit=5,
+    save_total_limit=50,
     push_to_hub=True,
     hub_model_id="georgeyw/gpt-2-small",
     hub_strategy="all_checkpoints",

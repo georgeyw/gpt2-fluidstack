@@ -18,8 +18,8 @@
     "scheduler": {
         "type": "WarmupCosineLR",
         "params": {
-          "total_num_steps": 1000,
-          "warmup_num_steps": 10,
+          "total_num_steps": 800000,
+          "warmup_num_steps": 8000,
           "warmup_type": "linear",
           "cos_min_ratio": 0.1
         }
