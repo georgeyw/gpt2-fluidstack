@@ -116,12 +116,14 @@ class CustomTrainer(Trainer):
 
         output_dir = self.args.output_dir
         upload_dir = Path(output_dir + "-upload-" + str(self.state.global_step))
+        os.makedirs(upload_dir, exist_ok=True)
         # To avoid a new synchronization of all model weights, we just copy the file from the checkpoint folder
         modeling_files = [CONFIG_NAME, WEIGHTS_NAME, SAFE_WEIGHTS_NAME]
         if is_peft_available():
             modeling_files.extend([ADAPTER_CONFIG_NAME, ADAPTER_WEIGHTS_NAME, ADAPTER_SAFE_WEIGHTS_NAME])
         for modeling_file in modeling_files:
             for checkpoint_folder in checkpoint_folders:
+                os.makedirs(os.path.join(upload_dir, checkpoint_folder), exist_ok=True)
                 if os.path.isfile(os.path.join(output_dir, checkpoint_folder, modeling_file)):
                     shutil.copy(os.path.join(output_dir, checkpoint_folder, modeling_file), os.path.join(upload_dir, checkpoint_folder, modeling_file))
         # Saving the tokenizer is fast and we don't know how many files it may have spawned, so we resave it to be sure.
