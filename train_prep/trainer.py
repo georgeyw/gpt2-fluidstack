@@ -40,7 +40,7 @@ class CustomTrainer(Trainer):
         assert self.push_hub_every % self.args.save_steps == 0
 
     def compute_loss(self, model, inputs, return_outputs=False):
-        inputs = torch.stack([item[0] for item in inputs])
+        inputs = torch.stack(inputs)
         outputs = model(inputs)
         logits = outputs.logits
         loss = lm_cross_entropy_loss(logits, inputs)
