@@ -11,6 +11,9 @@ S3_SESSION = aioboto3.Session(
     aws_secret_access_key=AWS_SECRET_KEY
 )
 
+BUCKET = "devinter-language"
+S3_FOLDER = "gpt-2-small"
+
 async def upload_file_to_s3(s3_client, local_path, bucket_name, s3_path):
     try:
         await s3_client.upload_file(Filename=local_path, Bucket=bucket_name, Key=s3_path)
@@ -19,7 +22,7 @@ async def upload_file_to_s3(s3_client, local_path, bucket_name, s3_path):
         print("Credentials not available")
         return
     
-async def upload_folder_to_s3(local_directory, bucket_name, s3_folder):
+async def upload_folder_to_s3(local_directory, bucket_name=BUCKET, s3_folder=S3_FOLDER):
     """
     Asynchronously uploads contents of a local directory to an S3 bucket path without deleting existing files,
     using the provided AWS credentials.
