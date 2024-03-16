@@ -1,6 +1,6 @@
 import os 
 
-from train_prep.upload import async_upload_folder_to_s3
+from train_prep.upload import async_upload_to_s3
 
 folder = './upload_test/'
 
