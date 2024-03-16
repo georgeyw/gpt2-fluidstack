@@ -1,6 +1,6 @@
 import os 
 
-from train_prep.upload import upload_folder_to_s3
+from train_prep.upload import async_upload_folder_to_s3
 
 folder = './upload_test/'
 
@@ -28,4 +28,7 @@ create_test_files(directory=folder + 'test_folder1')
 create_test_files(directory=folder + 'test_folder2')
 
 
-upload_folder_to_s3(folder)
+async_upload_folder_to_s3(folder)
+
+print('Main thread still responsive!')
+print('Foo bar baz bat qux quux corge grault garply waldo fred plugh xyzzy thud.')
