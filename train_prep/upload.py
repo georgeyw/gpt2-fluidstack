@@ -21,7 +21,16 @@ def start_asyncio_event_loop(loop):
     asyncio.set_event_loop(loop)
     loop.run_forever()
 
+async def wait_for_remaining_tasks(loop):
+    # Get all tasks in the current event loop
+    tasks = [task for task in asyncio.all_tasks(loop) if task is not asyncio.current_task(loop)]
+    
+    # If there are any tasks pending, wait for them to be completed.
+    if tasks:
+        await asyncio.gather(*tasks)
+
 async def stop_loop(loop):
+    await wait_for_remaining_tasks(loop)
     loop.stop()
 
 def run_in_background(loop, coroutine):
