@@ -2,9 +2,10 @@ import os
 
 from train_prep.upload import async_upload_to_s3
 
-folder = './upload_test/'
+folder1 = './upload_test/'
+folder2 = './upload_test2/'
 
-def create_test_files(num_files=5, size_in_gb=1, directory='./'):
+def create_test_files(num_files=2, size_in_gb=0.3, directory='./'):
     """
     Creates a set of test files of specified size.
 
@@ -13,7 +14,7 @@ def create_test_files(num_files=5, size_in_gb=1, directory='./'):
     - size_in_gb: Size of each file in gigabytes.
     - directory: The directory where files will be created.
     """
-    size_in_bytes = size_in_gb * 1024 * 1024 * 1024  # Convert GB to Bytes
+    size_in_bytes = int(size_in_gb * 1024 * 1024 * 1024)  # Convert GB to Bytes
     os.makedirs(directory, exist_ok=True)
 
     for i in range(num_files):
@@ -24,11 +25,19 @@ def create_test_files(num_files=5, size_in_gb=1, directory='./'):
         print(f"Created {filepath}")
 
 # Example usage
-create_test_files(directory=folder + 'test_folder1')
-create_test_files(directory=folder + 'test_folder2')
+create_test_files(directory=folder1 + 'test_folder1')
+create_test_files(directory=folder1 + 'test_folder2')
 
+create_test_files(directory=folder2 + 'test_folder3')
+create_test_files(directory=folder2 + 'test_folder4')
 
-async_upload_to_s3(folder)
+thread1 = async_upload_to_s3(folder1)
+thread2 = async_upload_to_s3(folder2)
 
 print('Main thread still responsive!')
 print('Foo bar baz bat qux quux corge grault garply waldo fred plugh xyzzy thud.')
+
+thread1.join()
+thread2.join()
+
+print('Threads finished!')

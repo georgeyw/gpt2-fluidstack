@@ -21,9 +21,13 @@ def start_asyncio_event_loop(loop):
     asyncio.set_event_loop(loop)
     loop.run_forever()
 
+async def stop_loop(loop):
+    loop.stop()
+
 def run_in_background(loop, coroutine):
     """Schedule coroutine execution in the asyncio event loop running in a separate thread."""
     asyncio.run_coroutine_threadsafe(coroutine, loop)
+    asyncio.run_coroutine_threadsafe(stop_loop(loop), loop)
 
 async def upload_file_to_s3(s3_client, local_path, bucket_name, s3_path):
     try:
@@ -72,3 +76,5 @@ def async_upload_to_s3(local_directory, bucket_name=BUCKET, s3_folder=S3_FOLDER)
     # Replace 'your_parameters_here' with the actual parameters your function needs
     coroutine = upload_folder_to_s3(local_directory, bucket_name, s3_folder)
     run_in_background(new_loop, coroutine)
+
+    return thread

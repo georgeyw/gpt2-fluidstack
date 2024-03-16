@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from huggingface_hub import upload_folder
+# from huggingface_hub import upload_folder
 from transformers import Trainer
 from transformers.trainer_utils import HubStrategy, IntervalStrategy
 from transformers.utils import (
@@ -19,6 +19,8 @@ from transformers.utils import (
     PushInProgress,
     is_peft_available,
 )
+
+from .upload import async_upload_to_s3
 
 # transformers constants
 PREFIX_CHECKPOINT_DIR = "checkpoint"
@@ -34,10 +36,12 @@ FSDP_MODEL_NAME = "pytorch_model_fsdp"
 # subclass Trainer for custom loss
 # only doing this to avoid having to figure out how to add labels to the dataset
 class CustomTrainer(Trainer):
-    def __init__(self, push_hub_every=None, *args, **kwargs):
+    def __init__(self, push_aws_every=None, clear_threads_every=5_000, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.push_hub_every = push_hub_every
+        self.push_hub_every = push_aws_every
         assert self.push_hub_every % self.args.save_steps == 0
+        self.clear_threads_every = clear_threads_every
+        self.threads = []
 
     def compute_loss(self, model, inputs, return_outputs=False):
         inputs = torch.stack(inputs)
@@ -152,14 +156,22 @@ class CustomTrainer(Trainer):
         push_jobs = []
 
         if self.args.hub_strategy in [HubStrategy.CHECKPOINT, HubStrategy.ALL_CHECKPOINTS]:
-            checkpoint_push = upload_folder(
-                repo_id=self.hub_model_id,
-                folder_path=upload_dir,
-                commit_message=commit_message + ", checkpoint",
-                token=self.args.hub_token,
-                run_as_future=True,
-            )
-            push_jobs.append(checkpoint_push)
+            # checkpoint_push = upload_folder(
+            #     repo_id=self.hub_model_id,
+            #     folder_path=upload_dir,
+            #     commit_message=commit_message + ", checkpoint",
+            #     token=self.args.hub_token,
+            #     run_as_future=True,
+            # )
+            # push_jobs.append(checkpoint_push)
+            thread = async_upload_to_s3(upload_dir)
+            self.threads.append(thread)
+
+        # close threads
+        if self.state.global_step > 0 and self.state.global_step % self.clear_threads_every == 0:
+            for thread in self.threads:
+                thread.join()
+            self.threads = []
 
         if self.push_in_progress is None or self.push_in_progress.is_done():
             self.push_in_progress = PushInProgress(push_jobs)

@@ -10,6 +10,7 @@ from train_prep.trainer import CustomTrainer, custom_data_collator
 HUB_TOKEN = os.environ.get("HUB_TOKEN")
 os.environ["WANDB_PROJECT"] = "gw-hf-trainer-test"
 
+# note that hf hub is disabled and replaced with aws upload
 TRAIN_ARGS = TrainingArguments(
     output_dir='./checkpoints',
     overwrite_output_dir=True,
@@ -62,7 +63,7 @@ if __name__ == "__main__":
         args=TRAIN_ARGS,
         train_dataset=dataset,
         data_collator=custom_data_collator,
-        push_hub_every=1000,
+        push_aws_every=1000,
     )
 
     trainer.train()
