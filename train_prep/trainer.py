@@ -169,9 +169,11 @@ class CustomTrainer(Trainer):
 
         # close threads
         if self.state.global_step > 0 and self.state.global_step % self.clear_threads_every == 0:
-            for thread in self.threads:
-                thread.join()
-            self.threads = []
+            if len(self.threads) > 0:
+                last_thread = self.threads[-1]
+                for thread in self.threads[:-1]:
+                    thread.join()
+                self.threads = [last_thread]
 
         if self.push_in_progress is None or self.push_in_progress.is_done():
             self.push_in_progress = PushInProgress(push_jobs)

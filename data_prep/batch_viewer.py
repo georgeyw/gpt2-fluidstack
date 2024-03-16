@@ -48,3 +48,4 @@ if __name__ == '__main__':
     dataset = MMapIndexedDataset(args.load_path, skip_warmup = True)
     indicies = dataset[math.ceil(args.start_iteration/2)*EFFECTIVE_BATCH_SIZE: math.ceil(args.end_iteration/2)*EFFECTIVE_BATCH_SIZE + 1]
     np.save(filename, indicies)
+    print('Saved')
