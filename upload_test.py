@@ -28,7 +28,7 @@ create_test_files(directory=folder + 'test_folder1')
 create_test_files(directory=folder + 'test_folder2')
 
 
-async_upload_folder_to_s3(folder)
+async_upload_to_s3(folder)
 
 print('Main thread still responsive!')
 print('Foo bar baz bat qux quux corge grault garply waldo fred plugh xyzzy thud.')
