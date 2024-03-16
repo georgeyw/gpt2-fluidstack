@@ -14,7 +14,7 @@ S3_SESSION = aioboto3.Session(
 )
 
 BUCKET = "devinterp-language"
-S3_FOLDER = "gpt-2-small"
+S3_FOLDER = "checkpoints/gpt-2-small"
 
 def start_asyncio_event_loop(loop):
     """Run an asyncio event loop in a separate thread."""
